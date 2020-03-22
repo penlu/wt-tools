@@ -6,6 +6,7 @@ import argparse
 import os.path
 
 from typing import Tuple, List, Iterable, Any, Dict
+import typing
 
 type_list = {
     0x0: 'size', 0x1: 'str', 0x2: 'int', 0x3: 'float', 0x4: 'vec2f',
