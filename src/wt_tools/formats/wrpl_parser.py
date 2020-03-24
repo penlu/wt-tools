@@ -16,6 +16,7 @@ wrpl_version = "wrpl_version" / Enum(Int16ul,
                                      version_1_49=0x88ca,
                                      version_1_51=0x88e7,
                                      version_1_63=0x8964,
+                                     version_1_95=0x8a97,
                                      version_1_97=0x8aa4
                                      )
 
@@ -35,8 +36,21 @@ wrpl_file = "wrpl" / Struct(
     # there skip some data, not used now anyway
     # ...
     #Seek(0x450 if wrpl_version == "version_1_45" else 0x440),
-    Seek(0x444),
+    Seek(0x444), # valid for at least 1.95 and 1.97
     "m_set" / simple_blk,
     "wrplu" / zlib_stream,
     "rez" / simple_blk,
+)
+
+wrpl_file2 = "wrpl" / Struct(
+    "magic" / Const(b"\xe5\xac\x00\x10"),
+    wrpl_version,
+    # here we ignore some bytes, better version detect i think
+    #"unknown_0" / Int24ul,
+    # there skip some data, not used now anyway
+    # ...
+    #Seek(0x450 if wrpl_version == "version_1_45" else 0x440),
+    Seek(0x444), # valid for at least 1.95 and 1.97
+    "m_set" / simple_blk,
+    "wrplu" / zlib_stream,
 )

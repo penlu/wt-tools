@@ -45,7 +45,7 @@ point_f_3d = Struct(
 
 simple_blk = "blk" / Struct(
     # b"\x00BBF"
-    "magic" / Const(Int32ub, 0x00424246),
+    "magic" / Const(b"\x00BBF"),
     "unknown_0" / Int32ub,
     "blk_body_size" / Int32ul,
     # maybe find more suitable format?
