@@ -1,7 +1,7 @@
 import os.path
 import argparse
 import struct
-from formats.wrplu_parser2 import wrplu_file, wrplu_file2
+from formats.wrplu_parser2 import wrplu_file
 from construct.lib import hexdump
 
 user_ids = [
@@ -106,6 +106,7 @@ def main():
         data = f.read()
 
     parsed = wrplu_file.parse(data)
+    print(len(parsed.chunks))
 
     #print(parsed.chunks[1674].header)
     #print(hexdump(parsed.chunks[1674].data, 32))

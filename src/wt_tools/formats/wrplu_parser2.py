@@ -2,7 +2,6 @@ from construct import *
 
 chunk = Struct(
     #"chunk_start" / Probe(),
-    # if true, then: length field is 1 byte and unknown should be False
     "header" / BitStruct(
         "onebyte" / Flag,
         "twobyte" / Flag,
@@ -23,5 +22,5 @@ chunk = Struct(
 )
 
 wrplu_file = Struct(
-    "chunks" / GreedyRange(chunk2),
+    "chunks" / GreedyRange(chunk),
 )
