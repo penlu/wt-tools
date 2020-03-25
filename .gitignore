@@ -3,3 +3,6 @@ venv/
 
 # IDEA files
 .idea/
+
+*.pyc
+__pycache__/

@@ -50,7 +50,7 @@ def print_lens(parsed):
         print(chunk.chunk_size)
 
 def print_first_byte(parsed):
-    for i, chunk in enumerate(parsed.chunks[:1180]):
+    for i, chunk in enumerate(parsed.chunks):
         if len(chunk.data) == 0:
             #print("ZERO")
             pass
@@ -81,6 +81,23 @@ def main():
         data = f.read()
 
     parsed = unpack(data, filename)
+
+    #for i, chunk in enumerate(parsed.chunks):
+    #    print(i, chunk.chunk_params.is_one_byte, chunk.chunk_params.unknown, chunk.chunk_size)
+    #for i, chunk in enumerate(parsed.chunks):
+    #    if not chunk.chunk_params.is_one_byte:
+    #        print(chunk.chunk_params.unknown, chunk.chunk_size)
+
+    #for chunk in parsed.chunks[:1165]:
+    #    if chunk.chunk_params.is_one_byte:
+    #        print(chunk.chunk_size)
+    #for i, chunk in enumerate(parsed.chunks[:1165]):
+    #    if chunk.chunk_params.is_one_byte and chunk.chunk_size > 31:
+    #        print("found one!")
+    #        print(hexdump(chunk.data, 16))
+    #        print(hexdump(parsed.chunks[i + 1].data, 16))
+    #print("over")
+
     #find_users(parsed)
     #print_lens(parsed)
     print_first_byte(parsed)
