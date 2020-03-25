@@ -50,7 +50,7 @@ def print_user_chunks(parsed):
 # nearly all are quite short
 def print_lens(parsed):
     for chunk in parsed.chunks:
-        print(chunk.chunk_size)
+        print(chunk.length)
 
 # dump chunk firstbyte
 # noted: 4 and 12 appear to be far and away the most common firstbyte of data
@@ -67,38 +67,30 @@ def print_odd_chunks(parsed):
     for i, chunk in enumerate(parsed.chunks):
         if not (chunk.data[0] in [0, 2, 3, 4, 10, 11, 12]):
             print(i)
-            print(chunk.chunk_size)
+            print(chunk.length)
             print(hexdump(chunk.data, 32))
 
 # noted: nearly all onebytes have "False" in unknown
 def print_onebyte_meta(parsed):
     for i, chunk in enumerate(parsed.chunks):
-        if chunk.chunk_params.is_one_byte:
-            print(chunk.chunk_params.unknown, chunk.chunk_size)
+        if chunk.header.is_one_byte:
+            print(chunk.header.unknown, chunk.length)
 
 # noted: nearly all twobytes have "True" in unknown
 # unusual ones include ones that are wrong
 def print_notonebyte_meta(parsed):
     for i, chunk in enumerate(parsed.chunks):
-        if not chunk.chunk_params.is_one_byte:
-            print(chunk.chunk_params.unknown, chunk.chunk_size)
+        if not chunk.header.is_one_byte:
+            print(chunk.header.unknown, chunk.length)
 
 # so, print onebytes with "True", and print twobytes with "False"
 # noted: all the nonstandard chunks are misparsed
 def print_nonstandard(parsed):
     for i, chunk in enumerate(parsed.chunks):
-        if not (chunk.chunk_params.is_one_byte ^ chunk.chunk_params.unknown):
+        if not (chunk.header.is_one_byte ^ chunk.header.unknown):
             print(i)
-            print(chunk.chunk_size)
+            print(chunk.length)
             print(hexdump(chunk.data, 32))
-
-# just to see which ones have "unknown" flag set
-def print_unknown_chunks(parsed):
-    print(parsed.chunks[1164].chunk_params)
-    print(hexdump(parsed.chunks[1164].data, 32))
-    for i in range(1165):
-        if parsed.chunks[i].chunk_params.unknown:
-            print(hexdump(parsed.chunks[i].data, 32))
 
 def main():
     parser = argparse.ArgumentParser(description="Unpacks wrplu")
@@ -113,10 +105,17 @@ def main():
     with open(filename, 'rb') as f:
         data = f.read()
 
-    parsed = wrplu_file2.parse(data)
+    parsed = wrplu_file.parse(data)
 
-    print(parsed.chunks[1166].header)
-    print(hexdump(parsed.chunks[1166].data, 32))
+    #print(parsed.chunks[1674].header)
+    #print(hexdump(parsed.chunks[1674].data, 32))
+
+    for i, chunk in enumerate(parsed.chunks):
+        if chunk.length != 0:
+            if not (chunk.data[0] in [4, 12]):
+                print(i)
+                print(chunk.length)
+                print(hexdump(chunk.data, 32))
 
     #find_users(parsed)
     #print_lens(parsed)
@@ -124,7 +123,6 @@ def main():
     #print_onebyte_meta(parsed)
     #print_notonebyte_meta(parsed)
     #print_nonstandard(parsed)
-    #print_unknown_chunks(parsed)
 
     return parsed
 
